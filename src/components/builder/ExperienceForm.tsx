@@ -2,13 +2,14 @@
 
 import { useResumeStore } from "@/store/useResumeStore";
 import { Experience } from "@/types/resume";
-import { Plus, Trash2, ChevronDown, ChevronUp } from "lucide-react";
+import { Plus, Trash2, ChevronDown, ChevronUp, GripVertical } from "lucide-react";
 import { useState } from "react";
 import { AIAssistantButton } from "@/components/ui/AIAssistantButton";
 
 export function ExperienceForm() {
-  const { resumeData, addExperience, updateExperience, removeExperience } = useResumeStore();
+  const { resumeData, addExperience, updateExperience, removeExperience, reorderExperiences } = useResumeStore();
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [dragIndex, setDragIndex] = useState<number | null>(null);
 
   const handleAdd = () => {
     const newId = crypto.randomUUID();
@@ -31,19 +32,40 @@ export function ExperienceForm() {
       </div>
 
       <div className="space-y-3">
-        {resumeData.experiences.map((exp) => (
-          <div key={exp.id} className="rounded-xl overflow-hidden"
-            style={{ border: "1px solid var(--border-primary)" }}>
+        {resumeData.experiences.map((exp, i) => (
+          <div
+            key={exp.id}
+            draggable
+            onDragStart={(e) => {
+              const tag = (e.target as HTMLElement).tagName;
+              if (["INPUT", "TEXTAREA", "BUTTON", "LABEL", "SELECT"].includes(tag)) {
+                e.preventDefault();
+                return;
+              }
+              setDragIndex(i);
+            }}
+            onDragOver={(e) => e.preventDefault()}
+            onDrop={() => {
+              if (dragIndex !== null && dragIndex !== i) reorderExperiences(dragIndex, i);
+              setDragIndex(null);
+            }}
+            onDragEnd={() => setDragIndex(null)}
+            className="rounded-xl overflow-hidden transition-opacity"
+            style={{ border: dragIndex === i ? "1px dashed var(--primary-500)" : "1px solid var(--border-primary)", opacity: dragIndex === i ? 0.4 : 1 }}
+          >
             <div className="p-3 flex justify-between items-center cursor-pointer transition-colors"
               style={{ background: "var(--bg-secondary)" }}
               onClick={() => setExpandedId(expandedId === exp.id ? null : exp.id)}>
-              <div>
-                <h4 className="font-medium text-sm" style={{ color: "var(--text-primary)" }}>
-                  {exp.jobTitle || "New Role"}
-                </h4>
-                <p className="text-xs" style={{ color: "var(--text-tertiary)" }}>
-                  {exp.company || "Company Name"}
-                </p>
+              <div className="flex items-center gap-2 min-w-0">
+                <GripVertical size={15} className="cursor-grab flex-shrink-0" style={{ color: "var(--text-tertiary)" }} aria-label="Drag to reorder" />
+                <div className="min-w-0">
+                  <h4 className="font-medium text-sm truncate" style={{ color: "var(--text-primary)" }}>
+                    {exp.jobTitle || "New Role"}
+                  </h4>
+                  <p className="text-xs truncate" style={{ color: "var(--text-tertiary)" }}>
+                    {exp.company || "Company Name"}
+                  </p>
+                </div>
               </div>
               <div className="flex items-center gap-2">
                 <button onClick={(e) => { e.stopPropagation(); removeExperience(exp.id); }}

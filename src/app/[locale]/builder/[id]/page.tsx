@@ -7,16 +7,69 @@ import { useReactToPrint } from "react-to-print";
 import { Download, ChevronLeft, Save, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useResumeStore } from "@/store/useResumeStore";
+import { useResumeStore, initialResumeData } from "@/store/useResumeStore";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function BuilderPage() {
   const params = useParams();
   const locale = (params?.locale as string) || "en";
-  const { resumeData } = useResumeStore();
+  const { resumeData, setResumeData } = useResumeStore();
   const componentRef = useRef(null);
   const [saving, setSaving] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  // Load the saved resume into the editor when the builder opens.
+  useEffect(() => {
+    const id = params?.id as string | undefined;
+    if (!id) {
+      setLoading(false);
+      return;
+    }
+    let active = true;
+    (async () => {
+      try {
+        const res = await fetch(`/api/resumes/${id}`);
+        if (res.ok && active) {
+          const { resume } = await res.json();
+          if (resume?.dataJson) {
+            const parsed = JSON.parse(resume.dataJson);
+            // Merge with defaults so every array/field exists (guards against
+            // partial or older saves — never let a section be undefined).
+            setResumeData({
+              ...initialResumeData,
+              ...parsed,
+              personalInfo: { ...initialResumeData.personalInfo, ...(parsed.personalInfo || {}) },
+              experiences: parsed.experiences ?? [],
+              educations: parsed.educations ?? [],
+              skills: parsed.skills ?? [],
+              projects: parsed.projects ?? [],
+              languages: parsed.languages ?? [],
+              certificates: parsed.certificates ?? [],
+              references: parsed.references ?? [],
+              sectionOrder: parsed.sectionOrder ?? initialResumeData.sectionOrder,
+              id: resume.id,
+            });
+          } else if (resume) {
+            setResumeData({
+              ...initialResumeData,
+              id: resume.id,
+              title: resume.title || "Untitled CV",
+              templateId: resume.templateId || "executive",
+              colorHex: resume.colorHex || "#4f46e5",
+            });
+          }
+        }
+      } catch {
+        /* keep current state on failure */
+      } finally {
+        if (active) setLoading(false);
+      }
+    })();
+    return () => {
+      active = false;
+    };
+  }, [params?.id, setResumeData]);
 
   const handlePrint = useReactToPrint({
     contentRef: componentRef,
@@ -38,6 +91,14 @@ export default function BuilderPage() {
       setTimeout(() => setSaving(false), 800);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen w-full" style={{ background: "var(--bg-primary)" }}>
+        <Loader2 className="w-8 h-8 animate-spin" style={{ color: "var(--primary-500)" }} />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col h-screen w-full overflow-hidden" style={{ background: "var(--bg-primary)" }}>

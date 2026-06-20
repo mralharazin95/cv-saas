@@ -40,21 +40,17 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
     if (!userId) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
     const data = await req.json();
-    const updateData: any = {
-      title: data.title,
-      colorHex: data.colorHex,
-      templateId: data.templateId,
-    };
 
-    if (data.personalInfo) {
-      updateData.personalInfo = {
-        upsert: { create: data.personalInfo, update: data.personalInfo }
-      };
-    }
-
+    // The full builder state (all sections, free-text dates) is stored as
+    // JSON; the scalar columns stay in sync so the dashboard list works.
     await prisma.resume.update({
       where: { id, userId },
-      data: updateData,
+      data: {
+        title: typeof data.title === "string" ? data.title : undefined,
+        colorHex: typeof data.colorHex === "string" ? data.colorHex : undefined,
+        templateId: typeof data.templateId === "string" ? data.templateId : undefined,
+        dataJson: JSON.stringify(data),
+      },
     });
 
     return NextResponse.json({ message: "Saved" }, { status: 200 });

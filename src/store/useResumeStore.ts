@@ -20,6 +20,7 @@ interface ResumeStore {
   addExperience: (exp: Experience) => void;
   updateExperience: (id: string, exp: Partial<Experience>) => void;
   removeExperience: (id: string) => void;
+  reorderExperiences: (from: number, to: number) => void;
 
   addEducation: (edu: Education) => void;
   updateEducation: (id: string, edu: Partial<Education>) => void;
@@ -48,7 +49,7 @@ interface ResumeStore {
   toggleSection: (sectionId: string) => void;
 }
 
-const initialResumeData: ResumeData = {
+export const initialResumeData: ResumeData = {
   title: "Untitled CV",
   templateId: "modern",
   colorHex: "#4f46e5",
@@ -113,6 +114,15 @@ export const useResumeStore = create<ResumeStore>((set) => ({
         experiences: state.resumeData.experiences.filter((e) => e.id !== id),
       },
     })),
+
+  reorderExperiences: (from, to) =>
+    set((state) => {
+      const arr = [...state.resumeData.experiences];
+      if (from < 0 || from >= arr.length || to < 0 || to >= arr.length) return {};
+      const [moved] = arr.splice(from, 1);
+      arr.splice(to, 0, moved);
+      return { resumeData: { ...state.resumeData, experiences: arr } };
+    }),
 
   // Education
   addEducation: (edu) =>

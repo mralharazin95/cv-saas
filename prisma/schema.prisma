@@ -77,7 +77,9 @@ model Resume {
   isPublic    Boolean  @default(false)
   templateId  String   @default("modern")
   colorHex    String   @default("#1e40af")
-  
+  // Full builder state (sections, dates as free text, etc.) stored as JSON.
+  dataJson    String?
+
   userId      String
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
