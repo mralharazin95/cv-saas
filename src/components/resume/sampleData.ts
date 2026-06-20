@@ -1,5 +1,7 @@
-// Sample resume used across landing previews and (later) the template engine.
+// Sample resume used across landing previews and the builder template engine.
 // Real, specific content — not placeholder bars — so previews read as a genuine product.
+
+import type { ResumeData } from "@/types/resume";
 
 export interface SampleResume {
   name: string;
@@ -13,6 +15,10 @@ export interface SampleResume {
   experience: { role: string; company: string; period: string; bullets: string[] }[];
   skills: string[];
   education: { degree: string; school: string; period: string }[];
+  // Optional sections (rendered when present — used by the builder).
+  projects?: { name: string; description: string; link?: string }[];
+  languages?: { name: string; level: string }[];
+  certificates?: { name: string; issuer: string; date?: string }[];
 }
 
 export const SAMPLE: SampleResume = {
@@ -101,3 +107,71 @@ export const ACCENTS = [
   { name: "Slate", value: "#334155" },
   { name: "Gold", value: "#b8860b" },
 ];
+
+// ---- Builder integration: map the store's ResumeData onto the preview shape ----
+
+function fmtPeriod(start?: string, end?: string, isCurrent?: boolean): string {
+  const s = (start || "").trim();
+  const e = isCurrent ? "Present" : (end || "").trim();
+  if (s && e) return `${s} — ${e}`;
+  return s || e || "";
+}
+
+export function resumeDataToContent(d: ResumeData): SampleResume {
+  const p = d.personalInfo;
+  const name = `${p.firstName || ""} ${p.lastName || ""}`.trim() || "Your Name";
+  const initials =
+    `${(p.firstName || "")[0] || ""}${(p.lastName || "")[0] || ""}`.toUpperCase() || "CV";
+  return {
+    name,
+    title: d.experiences[0]?.jobTitle || "",
+    initials,
+    location: [p.city, p.country].filter(Boolean).join(", ") || p.address || "",
+    email: p.email || "",
+    phone: p.phone || "",
+    site: p.websiteUrl || p.linkedinUrl || "",
+    summary: p.summary || "",
+    experience: d.experiences.map((e) => ({
+      role: e.jobTitle || "",
+      company: [e.company, e.location].filter(Boolean).join(" · "),
+      period: fmtPeriod(e.startDate, e.endDate, e.isCurrent),
+      bullets: (e.description || "")
+        .split("\n")
+        .map((b) => b.replace(/^[-•*\s]+/, "").trim())
+        .filter(Boolean),
+    })),
+    skills: d.skills.map((s) => s.name).filter(Boolean),
+    education: d.educations.map((e) => ({
+      degree: e.degree || "",
+      school: [e.school, e.location].filter(Boolean).join(", "),
+      period: fmtPeriod(e.startDate, e.endDate, e.isCurrent),
+    })),
+    projects: d.projects.length
+      ? d.projects.map((x) => ({ name: x.name, description: x.description, link: x.link }))
+      : undefined,
+    languages: d.languages.length
+      ? d.languages.map((l) => ({ name: l.name, level: l.proficiency }))
+      : undefined,
+    certificates: d.certificates.length
+      ? d.certificates.map((c) => ({ name: c.name, issuer: c.issuer, date: c.date }))
+      : undefined,
+  };
+}
+
+// Older saved resumes used template ids modern/professional/minimal/academic/creative.
+const TEMPLATE_ALIASES: Record<string, string> = {
+  professional: "corporate",
+  academic: "premium",
+};
+
+export function resolveTemplateId(id: string | undefined): string {
+  if (id && TEMPLATES.some((t) => t.id === id)) return id;
+  const aliased = id ? TEMPLATE_ALIASES[id] : undefined;
+  if (aliased && TEMPLATES.some((t) => t.id === aliased)) return aliased;
+  return "executive";
+}
+
+export function getTemplate(id: string | undefined): TemplateDef {
+  const resolved = resolveTemplateId(id);
+  return TEMPLATES.find((t) => t.id === resolved) || TEMPLATES[0];
+}

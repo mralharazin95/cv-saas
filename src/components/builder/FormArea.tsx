@@ -9,7 +9,9 @@ import { LanguagesForm } from "./LanguagesForm";
 import { CertificatesForm } from "./CertificatesForm";
 import { ReferencesForm } from "./ReferencesForm";
 import { AIAssistantButton } from "@/components/ui/AIAssistantButton";
-import { TEMPLATES, COLOR_PRESETS, FONT_OPTIONS } from "@/types/resume";
+import { COLOR_PRESETS } from "@/types/resume";
+import { ResumePreview } from "@/components/resume/ResumePreview";
+import { TEMPLATES as ENGINE_TEMPLATES, resumeDataToContent, resolveTemplateId } from "@/components/resume/sampleData";
 import {
   User,
   Briefcase,
@@ -42,7 +44,9 @@ const sectionIcons: Record<string, any> = {
 export function FormArea() {
   const { resumeData, updatePersonalInfo, updateSettings } = useResumeStore();
   const [activeSection, setActiveSection] = useState<string>("personal");
-  const [showCustomize, setShowCustomize] = useState(false);
+  const [showCustomize, setShowCustomize] = useState(true);
+  const previewContent = resumeDataToContent(resumeData);
+  const activeTemplateId = resolveTemplateId(resumeData.templateId);
 
   const sections = [
     { id: "personal", label: "Personal Information", icon: User },
@@ -95,23 +99,33 @@ export function FormArea() {
               style={{ color: "var(--text-tertiary)" }}>
               Template
             </label>
-            <div className="grid grid-cols-5 gap-2">
-              {TEMPLATES.map((tpl) => (
-                <button
-                  key={tpl.id}
-                  onClick={() => updateSettings({ templateId: tpl.id })}
-                  className="p-2 rounded-xl text-center transition-all text-xs font-medium"
-                  style={{
-                    background: resumeData.templateId === tpl.id ? "var(--primary-50)" : "var(--bg-secondary)",
-                    color: resumeData.templateId === tpl.id ? "var(--primary-600)" : "var(--text-secondary)",
-                    border: resumeData.templateId === tpl.id
-                      ? "2px solid var(--primary-500)"
-                      : "1px solid var(--border-primary)",
-                  }}
-                >
-                  {tpl.name}
-                </button>
-              ))}
+            <div className="grid grid-cols-2 gap-2.5">
+              {ENGINE_TEMPLATES.map((tpl) => {
+                const active = activeTemplateId === tpl.id;
+                return (
+                  <button
+                    key={tpl.id}
+                    onClick={() => updateSettings({ templateId: tpl.id })}
+                    className="rounded-lg overflow-hidden text-left transition-all"
+                    style={{
+                      border: active ? "2px solid var(--primary-500)" : "1px solid var(--border-primary)",
+                      background: "var(--bg-secondary)",
+                    }}
+                  >
+                    <div className="p-1.5" style={{ background: "var(--bg-tertiary)" }}>
+                      <ResumePreview
+                        template={tpl}
+                        accent={resumeData.colorHex}
+                        data={previewContent}
+                        style={{ borderRadius: 3, overflow: "hidden", boxShadow: "0 1px 2px rgba(0,0,0,0.12)" }}
+                      />
+                    </div>
+                    <div className="px-2 py-1.5 text-[11px] font-semibold truncate" style={{ color: active ? "var(--primary-600)" : "var(--text-secondary)" }}>
+                      {tpl.name}
+                    </div>
+                  </button>
+                );
+              })}
             </div>
           </div>
 
@@ -143,29 +157,6 @@ export function FormArea() {
             </div>
           </div>
 
-          {/* Font selector */}
-          <div>
-            <label className="text-xs font-semibold uppercase tracking-wider mb-2 block"
-              style={{ color: "var(--text-tertiary)" }}>
-              Font
-            </label>
-            <select
-              value={resumeData.fontFamily}
-              onChange={(e) => updateSettings({ fontFamily: e.target.value })}
-              className="w-full px-3 py-2 rounded-xl text-sm outline-none"
-              style={{
-                background: "var(--bg-secondary)",
-                border: "1px solid var(--border-primary)",
-                color: "var(--text-primary)",
-              }}
-            >
-              {FONT_OPTIONS.map((f) => (
-                <option key={f.value} value={f.value} style={{ fontFamily: f.value }}>
-                  {f.label}
-                </option>
-              ))}
-            </select>
-          </div>
         </div>
       )}
 
