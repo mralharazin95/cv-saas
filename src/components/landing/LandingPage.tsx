@@ -27,6 +27,8 @@ import {
   Quote,
   Crown,
   TrendingUp,
+  ChevronDown,
+  Gauge,
 } from "lucide-react";
 import { useState } from "react";
 import { ResumePreview } from "@/components/resume/ResumePreview";
@@ -78,6 +80,15 @@ export function LandingPage() {
 
   const companies = ["Google", "Microsoft", "Amazon", "Meta", "Apple", "Stripe", "Spotify", "Nvidia"];
 
+  const featureMenu = [
+    { icon: Wand2, name: "AI Writer", desc: "Generate & rewrite with AI", href: "#ai" },
+    { icon: Gauge, name: "Resume Analyzer", desc: "ATS, readability & keyword score", href: "#ats" },
+    { icon: PenLine, name: "Cover Letters", desc: "AI cover letter builder", href: `/${locale}/cover` },
+    { icon: LayoutTemplate, name: "20 Templates", desc: "ATS-friendly, recruiter-approved", href: "#templates" },
+    { icon: Download, name: "Export & Share", desc: "PDF, DOCX, JSON, link, QR", href: "#features" },
+    { icon: Globe, name: "Portfolio Site", desc: "Turn your CV into a web page", href: `/${locale}/register` },
+  ];
+
   const freeFeatures = ["free_1", "free_2", "free_3", "free_4"];
   const proFeatures = ["pro_1", "pro_2", "pro_3", "pro_4", "pro_5"];
 
@@ -104,10 +115,35 @@ export function LandingPage() {
             <span className="font-display font-bold text-xl tracking-tight">ResumeX</span>
           </Link>
 
-          <div className="hidden md:flex items-center gap-7">
-            <a href="#features" className="text-sm font-medium transition-colors hover:opacity-70" style={{ color: "var(--text-secondary)" }}>{nav("features")}</a>
-            <a href="#ai" className="text-sm font-medium transition-colors hover:opacity-70" style={{ color: "var(--text-secondary)" }}>AI</a>
+          <div className="hidden md:flex items-center gap-6">
+            {/* Features mega-menu */}
+            <div className="relative group">
+              <button className="flex items-center gap-1 text-sm font-medium transition-colors hover:opacity-70 py-2" style={{ color: "var(--text-secondary)" }}>
+                {nav("features")} <ChevronDown className="w-4 h-4 transition-transform group-hover:rotate-180" />
+              </button>
+              <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 opacity-0 invisible translate-y-1 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-200">
+                <div className="grid grid-cols-2 gap-1 p-2 rounded-2xl" style={{ width: 520, background: "var(--bg-elevated)", border: "1px solid var(--border-primary)", boxShadow: "var(--shadow-xl)" }}>
+                  {featureMenu.map((f) => {
+                    const Icon = f.icon;
+                    return (
+                      <a key={f.name} href={f.href} className="flex items-start gap-3 p-3 rounded-xl transition-colors" style={{ color: "var(--text-primary)" }}
+                        onMouseEnter={(e) => (e.currentTarget.style.background = "var(--bg-tertiary)")}
+                        onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
+                        <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: "var(--primary-50)" }}>
+                          <Icon className="w-4 h-4" style={{ color: "var(--primary-600)" }} />
+                        </div>
+                        <div>
+                          <div className="text-sm font-semibold">{f.name}</div>
+                          <div className="text-xs" style={{ color: "var(--text-tertiary)" }}>{f.desc}</div>
+                        </div>
+                      </a>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
             <a href="#templates" className="text-sm font-medium transition-colors hover:opacity-70" style={{ color: "var(--text-secondary)" }}>{nav("templates")}</a>
+            <a href={`/${locale}/cover`} className="text-sm font-medium transition-colors hover:opacity-70" style={{ color: "var(--text-secondary)" }}>Cover Letter</a>
             <a href="#pricing" className="text-sm font-medium transition-colors hover:opacity-70" style={{ color: "var(--text-secondary)" }}>{nav("pricing")}</a>
           </div>
 
@@ -134,6 +170,8 @@ export function LandingPage() {
             <div className="flex flex-col gap-4">
               <a href="#features" onClick={() => setMobileMenu(false)} className="text-sm font-medium" style={{ color: "var(--text-secondary)" }}>{nav("features")}</a>
               <a href="#ai" onClick={() => setMobileMenu(false)} className="text-sm font-medium" style={{ color: "var(--text-secondary)" }}>AI</a>
+              <a href="#ats" onClick={() => setMobileMenu(false)} className="text-sm font-medium" style={{ color: "var(--text-secondary)" }}>Resume Analyzer</a>
+              <a href={`/${locale}/cover`} onClick={() => setMobileMenu(false)} className="text-sm font-medium" style={{ color: "var(--text-secondary)" }}>Cover Letter</a>
               <a href="#templates" onClick={() => setMobileMenu(false)} className="text-sm font-medium" style={{ color: "var(--text-secondary)" }}>{nav("templates")}</a>
               <a href="#pricing" onClick={() => setMobileMenu(false)} className="text-sm font-medium" style={{ color: "var(--text-secondary)" }}>{nav("pricing")}</a>
               <div className="flex items-center gap-3 pt-2">
@@ -328,7 +366,7 @@ export function LandingPage() {
       </section>
 
       {/* ===== ATS scoring ===== */}
-      <section className="py-24" style={{ background: "var(--bg-secondary)", borderBlock: "1px solid var(--border-primary)" }}>
+      <section id="ats" className="py-24 scroll-mt-24" style={{ background: "var(--bg-secondary)", borderBlock: "1px solid var(--border-primary)" }}>
         <div className="max-w-6xl mx-auto px-6 grid lg:grid-cols-2 gap-14 items-center">
           <div>
             <div className="badge badge-brand mb-5"><BarChartMini />{t("ats_eyebrow")}</div>
