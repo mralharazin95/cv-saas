@@ -7,6 +7,7 @@ import {
   LayoutDashboard,
   FileText,
   PenLine,
+  LayoutTemplate,
   Settings,
   User,
   LogOut,
@@ -24,6 +25,7 @@ export function Sidebar() {
 
   const navItems = [
     { name: "Dashboard", href: `/${locale}/dashboard`, icon: LayoutDashboard },
+    { name: "Examples", href: `/${locale}/examples`, icon: LayoutTemplate },
     { name: "Cover Letter", href: `/${locale}/cover`, icon: PenLine },
     { name: "Profile", href: `/${locale}/dashboard/profile`, icon: User },
     { name: "Settings", href: `/${locale}/dashboard/settings`, icon: Settings },

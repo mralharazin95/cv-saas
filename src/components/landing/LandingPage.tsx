@@ -143,6 +143,7 @@ export function LandingPage() {
               </div>
             </div>
             <a href="#templates" className="text-sm font-medium transition-colors hover:opacity-70" style={{ color: "var(--text-secondary)" }}>{nav("templates")}</a>
+            <a href={`/${locale}/examples`} className="text-sm font-medium transition-colors hover:opacity-70" style={{ color: "var(--text-secondary)" }}>Examples</a>
             <a href={`/${locale}/cover`} className="text-sm font-medium transition-colors hover:opacity-70" style={{ color: "var(--text-secondary)" }}>Cover Letter</a>
             <a href="#pricing" className="text-sm font-medium transition-colors hover:opacity-70" style={{ color: "var(--text-secondary)" }}>{nav("pricing")}</a>
           </div>
@@ -172,6 +173,7 @@ export function LandingPage() {
               <a href="#ai" onClick={() => setMobileMenu(false)} className="text-sm font-medium" style={{ color: "var(--text-secondary)" }}>AI</a>
               <a href="#ats" onClick={() => setMobileMenu(false)} className="text-sm font-medium" style={{ color: "var(--text-secondary)" }}>Resume Analyzer</a>
               <a href={`/${locale}/cover`} onClick={() => setMobileMenu(false)} className="text-sm font-medium" style={{ color: "var(--text-secondary)" }}>Cover Letter</a>
+              <a href={`/${locale}/examples`} onClick={() => setMobileMenu(false)} className="text-sm font-medium" style={{ color: "var(--text-secondary)" }}>Examples</a>
               <a href="#templates" onClick={() => setMobileMenu(false)} className="text-sm font-medium" style={{ color: "var(--text-secondary)" }}>{nav("templates")}</a>
               <a href="#pricing" onClick={() => setMobileMenu(false)} className="text-sm font-medium" style={{ color: "var(--text-secondary)" }}>{nav("pricing")}</a>
               <div className="flex items-center gap-3 pt-2">
