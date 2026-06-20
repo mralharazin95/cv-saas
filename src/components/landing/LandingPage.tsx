@@ -16,10 +16,8 @@ import {
   ArrowRight,
   Check,
   Zap,
-  Layout,
   LayoutTemplate,
   Star,
-  ChevronRight,
   Menu,
   X,
   Wand2,
@@ -29,9 +27,11 @@ import {
   Quote,
   Crown,
   TrendingUp,
-  CircleCheckBig,
 } from "lucide-react";
 import { useState } from "react";
+import { ResumePreview } from "@/components/resume/ResumePreview";
+import { TemplatesStudio } from "@/components/resume/TemplatesStudio";
+import { TEMPLATES } from "@/components/resume/sampleData";
 
 export function LandingPage() {
   const t = useTranslations("Landing");
@@ -71,16 +71,8 @@ export function LandingPage() {
     { icon: Star, value: "92", key: "stat_score" },
   ];
 
-  const templates = [
-    { name: "Executive Elite", accent: "#4f46e5", tag: "Executive" },
-    { name: "Modern Professional", accent: "#06b6d4", tag: "Professional" },
-    { name: "ATS Pro", accent: "#0f172a", tag: "ATS" },
-    { name: "Creative Portfolio", accent: "#ec4899", tag: "Creative" },
-    { name: "Tech Innovator", accent: "#7c3aed", tag: "Tech" },
-    { name: "Corporate Premium", accent: "#0e7490", tag: "Corporate" },
-    { name: "Minimal Black", accent: "#334155", tag: "Minimal" },
-    { name: "Premium Gold", accent: "#d4a028", tag: "Premium" },
-  ];
+  const heroFront = TEMPLATES.find((x) => x.id === "executive")!;
+  const heroBack = TEMPLATES.find((x) => x.id === "creative")!;
 
   const testimonials = ["t1", "t2", "t3"];
 
@@ -203,32 +195,17 @@ export function LandingPage() {
             </div>
           </div>
 
-          {/* Right: resume mockup */}
+          {/* Right: real resume preview */}
           <div className="relative animate-fadeInUp stagger-2 hidden lg:block">
-            <div className="relative mx-auto max-w-sm">
-              <div className="card p-6" style={{ boxShadow: "var(--shadow-xl)" }}>
-                <div className="flex items-center gap-4 mb-5">
-                  <div className="w-16 h-16 rounded-2xl gradient-primary flex items-center justify-center text-white font-display font-bold text-2xl">A</div>
-                  <div className="flex-1">
-                    <div className="h-3.5 w-32 rounded-full mb-2" style={{ background: "var(--text-primary)", opacity: 0.85 }} />
-                    <div className="h-2.5 w-24 rounded-full" style={{ background: "var(--primary-400)" }} />
-                  </div>
-                </div>
-                <div className="space-y-2 mb-5">
-                  <div className="h-2 w-full rounded-full" style={{ background: "var(--border-primary)" }} />
-                  <div className="h-2 w-5/6 rounded-full" style={{ background: "var(--border-primary)" }} />
-                  <div className="h-2 w-4/6 rounded-full" style={{ background: "var(--border-primary)" }} />
-                </div>
-                <div className="h-2.5 w-20 rounded-full mb-3" style={{ background: "var(--primary-500)" }} />
-                <div className="space-y-2 mb-5">
-                  <div className="h-2 w-full rounded-full" style={{ background: "var(--border-primary)" }} />
-                  <div className="h-2 w-3/4 rounded-full" style={{ background: "var(--border-primary)" }} />
-                </div>
-                <div className="flex gap-2">
-                  {["#4f46e5", "#06b6d4", "#d4a028"].map((c) => (
-                    <div key={c} className="h-6 px-3 rounded-full" style={{ background: c, opacity: 0.18 }} />
-                  ))}
-                </div>
+            <div className="relative mx-auto" style={{ maxWidth: 380 }}>
+              {/* Peeking second template (depth) */}
+              <div className="absolute -top-4 -left-10 w-[72%] -rotate-6 rounded-xl overflow-hidden hidden xl:block" style={{ boxShadow: "var(--shadow-lg)", border: "1px solid var(--border-primary)", opacity: 0.85 }}>
+                <ResumePreview template={heroBack} accent="#0891b2" />
+              </div>
+
+              {/* Featured resume */}
+              <div className="relative rounded-2xl overflow-hidden" style={{ boxShadow: "var(--shadow-xl)", border: "1px solid var(--border-primary)" }}>
+                <ResumePreview template={heroFront} />
               </div>
 
               {/* Floating ATS score */}
@@ -400,42 +377,12 @@ export function LandingPage() {
             <h2 className="font-display text-3xl md:text-5xl font-bold mb-4">{t("templates_title")}</h2>
             <p className="text-lg" style={{ color: "var(--text-secondary)" }}>{t("templates_subtitle")}</p>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {templates.map((tpl) => (
-              <div key={tpl.name} className="group card card-hover overflow-hidden cursor-pointer">
-                <div className="aspect-[3/4] p-4" style={{ background: "var(--bg-tertiary)" }}>
-                  <div className="w-full h-full rounded-lg bg-white p-3 shadow-sm flex flex-col gap-2" style={{ boxShadow: "var(--shadow-sm)" }}>
-                    <div className="h-6 rounded" style={{ background: tpl.accent }} />
-                    <div className="flex gap-2 mt-1">
-                      <div className="w-1/3 space-y-1.5">
-                        <div className="h-1.5 rounded" style={{ background: tpl.accent, opacity: 0.5 }} />
-                        <div className="h-1.5 w-2/3 rounded bg-gray-200" />
-                        <div className="h-1.5 rounded bg-gray-200" />
-                        <div className="h-1.5 w-3/4 rounded bg-gray-200" />
-                      </div>
-                      <div className="flex-1 space-y-1.5">
-                        <div className="h-1.5 w-1/2 rounded" style={{ background: tpl.accent, opacity: 0.7 }} />
-                        <div className="h-1.5 rounded bg-gray-200" />
-                        <div className="h-1.5 rounded bg-gray-200" />
-                        <div className="h-1.5 w-5/6 rounded bg-gray-200" />
-                        <div className="h-1.5 w-2/3 rounded bg-gray-200" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="p-4 flex items-center justify-between">
-                  <h3 className="font-semibold text-sm">{tpl.name}</h3>
-                  <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: "var(--primary-50)", color: "var(--primary-600)" }}>{tpl.tag}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="text-center mt-12">
-            <Link href={`/${locale}/register`} className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl font-semibold transition-all hover:scale-105" style={{ background: "var(--bg-elevated)", color: "var(--text-primary)", border: "1px solid var(--border-primary)" }}>
-              {t("templates_cta")}
-              <ChevronRight className="w-4 h-4" />
-            </Link>
-          </div>
+          <TemplatesStudio
+            locale={locale}
+            colorLabel={t("studio_color")}
+            useLabel={t("studio_use")}
+            hint={t("studio_hint")}
+          />
         </div>
       </section>
 
