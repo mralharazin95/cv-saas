@@ -41,19 +41,27 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
 
     const data = await req.json();
 
-    // The full builder state (all sections, free-text dates) is stored as
-    // JSON; the scalar columns stay in sync so the dashboard list works.
-    await prisma.resume.update({
-      where: { id, userId },
-      data: {
-        title: typeof data.title === "string" ? data.title : undefined,
-        colorHex: typeof data.colorHex === "string" ? data.colorHex : undefined,
-        templateId: typeof data.templateId === "string" ? data.templateId : undefined,
-        dataJson: JSON.stringify(data),
-      },
-    });
+    // Build a partial update. Full saves (resume content) rewrite dataJson;
+    // publish-only requests ({ slug, isPublic }) must NOT touch dataJson.
+    const update: Record<string, unknown> = {};
+    if (typeof data.title === "string") update.title = data.title;
+    if (typeof data.colorHex === "string") update.colorHex = data.colorHex;
+    if (typeof data.templateId === "string") update.templateId = data.templateId;
+    if (typeof data.slug === "string") update.slug = data.slug.trim() || null;
+    else if (data.slug === null) update.slug = null;
+    if (typeof data.isPublic === "boolean") update.isPublic = data.isPublic;
 
-    return NextResponse.json({ message: "Saved" }, { status: 200 });
+    const isFullResume = !!data && (data.personalInfo || Array.isArray(data.experiences) || Array.isArray(data.sectionOrder));
+    if (isFullResume) update.dataJson = JSON.stringify(data);
+
+    try {
+      await prisma.resume.update({ where: { id, userId }, data: update });
+    } catch (e) {
+      // Most likely a duplicate slug (slug is unique).
+      return NextResponse.json({ message: "That public link is already taken — try another." }, { status: 409 });
+    }
+
+    return NextResponse.json({ message: "Saved", slug: update.slug }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ message: "Error" }, { status: 500 });
   }

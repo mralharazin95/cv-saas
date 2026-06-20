@@ -6,6 +6,7 @@ import { useSession, signOut } from "next-auth/react";
 import {
   LayoutDashboard,
   FileText,
+  PenLine,
   Settings,
   User,
   LogOut,
@@ -23,7 +24,7 @@ export function Sidebar() {
 
   const navItems = [
     { name: "Dashboard", href: `/${locale}/dashboard`, icon: LayoutDashboard },
-    { name: "My Resumes", href: `/${locale}/dashboard/resumes`, icon: FileText },
+    { name: "Cover Letter", href: `/${locale}/cover`, icon: PenLine },
     { name: "Profile", href: `/${locale}/dashboard/profile`, icon: User },
     { name: "Settings", href: `/${locale}/dashboard/settings`, icon: Settings },
   ];
