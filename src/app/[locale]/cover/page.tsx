@@ -4,6 +4,7 @@ import { use } from "react";
 import Link from "next/link";
 import { ChevronLeft, FileText } from "lucide-react";
 import { CoverLetterBuilder } from "@/components/cover/CoverLetterBuilder";
+import { runAI } from "@/lib/ai/client";
 
 export default function CoverLetterPage({
   params,
@@ -12,6 +13,25 @@ export default function CoverLetterPage({
 }) {
   // Client pages still receive params as a Promise in Next 16 — unwrap with use().
   const { locale } = use(params);
+
+  const handleAIGenerate = async (input: {
+    name: string;
+    role: string;
+    company: string;
+    highlights: string;
+    hiringManager: string;
+    tone: string;
+  }) => {
+    const prompt =
+      `Write a professional cover letter body for ${input.name || "the applicant"} applying for the ` +
+      `${input.role || "role"} position at ${input.company || "the company"}.` +
+      (input.hiringManager ? ` Address it to ${input.hiringManager}.` : "") +
+      ` Tone: ${input.tone || "professional"}.` +
+      (input.highlights ? ` Key highlights to weave in: ${input.highlights}.` : "") +
+      ` Return ONLY the letter body — greeting through the signature — with no date line.`;
+    const { text } = await runAI("cover_letter", prompt, { language: locale });
+    return text;
+  };
 
   return (
     <div className="min-h-screen" style={{ background: "var(--bg-secondary)" }}>
@@ -54,7 +74,7 @@ export default function CoverLetterPage({
 
       {/* Body */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6 animate-fadeIn">
-        <CoverLetterBuilder />
+        <CoverLetterBuilder onAIGenerate={handleAIGenerate} />
       </main>
     </div>
   );
