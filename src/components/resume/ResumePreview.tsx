@@ -279,6 +279,95 @@ function TechLayout({ data, accent, rootStyle }: LayoutProps) {
   );
 }
 
+function TimelineLayout({ data, accent, rootStyle }: LayoutProps) {
+  return (
+    <div style={{ ...rootStyle, padding: "1.6em 1.7em", display: "flex", flexDirection: "column", gap: "1em" }}>
+      <div>
+        <div style={{ fontSize: "2.4em", fontWeight: 800, color: INK }}>{data.name}</div>
+        {data.title && <div style={{ fontSize: "1.05em", fontWeight: 600, color: accent }}>{data.title}</div>}
+        <div style={{ marginTop: "0.35em" }}><Contact data={data} color={MUTED} /></div>
+        <div style={{ height: "0.2em", width: "3em", background: accent, marginTop: "0.6em", borderRadius: 2 }} />
+      </div>
+      {data.summary && <div><SecTitle color={accent}>Profile</SecTitle><div style={{ fontSize: "0.88em", color: MUTED, lineHeight: 1.5 }}>{data.summary}</div></div>}
+      {data.experience.length > 0 && (
+        <div>
+          <SecTitle color={accent}>Experience</SecTitle>
+          <div style={{ display: "flex", flexDirection: "column", gap: "0.85em", paddingInlineStart: "1em", borderInlineStart: `2px solid ${accent}33` }}>
+            {data.experience.map((x, i) => (
+              <div key={i} style={{ position: "relative" }}>
+                <div style={{ position: "absolute", insetInlineStart: "-1.5em", top: "0.2em", width: "0.6em", height: "0.6em", borderRadius: "50%", background: accent, border: "2px solid #fff" }} />
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: "0.5em" }}>
+                  <span style={{ fontWeight: 700, color: INK, fontSize: "1.02em" }}>{x.role}</span>
+                  {x.period && <span style={{ color: accent, fontSize: "0.82em", fontWeight: 600, whiteSpace: "nowrap" }}>{x.period}</span>}
+                </div>
+                {x.company && <div style={{ color: accent, fontSize: "0.9em", fontWeight: 600 }}>{x.company}</div>}
+                {x.bullets.length > 0 && <ul style={{ margin: "0.15em 0 0", paddingInlineStart: "1.05em", color: MUTED, fontSize: "0.86em", lineHeight: 1.45 }}>{x.bullets.map((b, j) => <li key={j}>{b}</li>)}</ul>}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+      <Extras data={data} accent={accent} />
+      <div style={{ display: "flex", gap: "1.5em" }}>
+        {data.skills.length > 0 && <div style={{ flex: 1 }}><SecTitle color={accent}>Skills</SecTitle><Skills data={data} accent={accent} variant="chips" /></div>}
+        {data.education.length > 0 && <div style={{ flex: 1 }}><SecTitle color={accent}>Education</SecTitle><Education data={data} accent={accent} /></div>}
+      </div>
+      {data.languages?.length ? <div><SecTitle color={accent}>Languages</SecTitle><Languages data={data} accent={accent} /></div> : null}
+    </div>
+  );
+}
+
+function CompactLayout({ data, accent, serif, rootStyle }: LayoutProps) {
+  return (
+    <div style={{ ...rootStyle, padding: "1.5em 1.6em", display: "flex", flexDirection: "column", gap: "0.9em" }}>
+      <div style={{ borderBottom: `2px solid ${accent}`, paddingBottom: "0.6em" }}>
+        <div style={{ fontSize: "2.2em", fontWeight: 800, color: INK, fontFamily: serif ? "Georgia, serif" : undefined }}>{data.name}</div>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: "1em", flexWrap: "wrap" }}>
+          {data.title && <span style={{ fontSize: "1em", fontWeight: 600, color: accent }}>{data.title}</span>}
+          <span style={{ fontSize: "0.78em", color: MUTED }}>{[data.email, data.phone, data.location].filter(Boolean).join("  ·  ")}</span>
+        </div>
+      </div>
+      <div style={{ display: "flex", gap: "1.5em" }}>
+        <div style={{ flex: "1 1 64%", display: "flex", flexDirection: "column", gap: "0.85em", minWidth: 0 }}>
+          {data.summary && <div><SecTitle color={accent}>Summary</SecTitle><div style={{ fontSize: "0.85em", color: MUTED, lineHeight: 1.5 }}>{data.summary}</div></div>}
+          {data.experience.length > 0 && <div><SecTitle color={accent}>Experience</SecTitle><Experience data={data} accent={accent} /></div>}
+          <Extras data={data} accent={accent} />
+        </div>
+        <div style={{ flex: "1 1 36%", display: "flex", flexDirection: "column", gap: "0.85em", minWidth: 0 }}>
+          {data.skills.length > 0 && <div><SecTitle color={accent}>Skills</SecTitle><div style={{ fontSize: "0.84em", color: MUTED, lineHeight: 1.7 }}>{data.skills.join(", ")}</div></div>}
+          {data.education.length > 0 && <div><SecTitle color={accent}>Education</SecTitle><Education data={data} accent={accent} /></div>}
+          {data.languages?.length ? <div><SecTitle color={accent}>Languages</SecTitle><Languages data={data} accent={accent} /></div> : null}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ElegantLayout({ data, accent, rootStyle }: LayoutProps) {
+  const ruleTitle: React.CSSProperties = { fontSize: "0.95em", fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: accent, marginBottom: "0.6em" };
+  return (
+    <div style={{ ...rootStyle, padding: "1.9em 2em", display: "flex", flexDirection: "column", gap: "1.1em", fontFamily: "Georgia, 'Times New Roman', serif" }}>
+      <div style={{ textAlign: "center" }}>
+        <div style={{ fontSize: "2.5em", fontWeight: 700, color: INK, letterSpacing: "0.04em" }}>{data.name}</div>
+        {data.title && <div style={{ fontSize: "0.95em", fontWeight: 400, color: accent, letterSpacing: "0.18em", textTransform: "uppercase", marginTop: "0.3em" }}>{data.title}</div>}
+        <div style={{ display: "flex", justifyContent: "center", marginTop: "0.5em" }}><Contact data={data} color={MUTED} /></div>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.6em", marginTop: "0.8em" }}>
+          <div style={{ height: 1, width: "2.5em", background: accent }} />
+          <div style={{ width: "0.32em", height: "0.32em", background: accent, transform: "rotate(45deg)" }} />
+          <div style={{ height: 1, width: "2.5em", background: accent }} />
+        </div>
+      </div>
+      {data.summary && <div style={{ textAlign: "center", fontSize: "0.9em", color: MUTED, lineHeight: 1.6, maxWidth: "86%", margin: "0 auto" }}>{data.summary}</div>}
+      {data.experience.length > 0 && <div><div style={{ textAlign: "center", ...ruleTitle }}>Experience</div><Experience data={data} accent={accent} /></div>}
+      <Extras data={data} accent={accent} />
+      <div style={{ display: "flex", gap: "1.8em" }}>
+        {data.skills.length > 0 && <div style={{ flex: 1 }}><div style={ruleTitle}>Skills</div><div style={{ fontSize: "0.86em", color: MUTED, lineHeight: 1.6 }}>{data.skills.join(" · ")}</div></div>}
+        {data.education.length > 0 && <div style={{ flex: 1 }}><div style={ruleTitle}>Education</div><Education data={data} accent={accent} /></div>}
+      </div>
+    </div>
+  );
+}
+
 export function ResumePreview({
   template,
   accent,
@@ -325,6 +414,9 @@ export function ResumePreview({
         {template.layout === "single" && <SingleLayout {...common} minimal={template.minimal} />}
         {template.layout === "creative" && <CreativeLayout {...common} />}
         {template.layout === "tech" && <TechLayout {...common} />}
+        {template.layout === "timeline" && <TimelineLayout {...common} />}
+        {template.layout === "compact" && <CompactLayout {...common} serif={template.font === "serif"} />}
+        {template.layout === "elegant" && <ElegantLayout {...common} />}
       </div>
     </div>
   );

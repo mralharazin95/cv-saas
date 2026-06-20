@@ -69,7 +69,7 @@ export const SAMPLE: SampleResume = {
   ],
 };
 
-export type TemplateLayout = "header" | "sidebar" | "single" | "creative" | "tech";
+export type TemplateLayout = "header" | "sidebar" | "single" | "creative" | "tech" | "timeline" | "compact" | "elegant";
 
 export interface TemplateDef {
   id: string;
@@ -86,13 +86,25 @@ export interface TemplateDef {
 // 8 launch templates (the first slice of the eventual 20), each a genuinely
 // distinct layout/personality — same content, different design.
 export const TEMPLATES: TemplateDef[] = [
-  { id: "executive", name: "Executive Elite", category: "Executive", layout: "header", accent: "#4f46e5", font: "sans" },
+  { id: "executive", name: "Executive Elite", category: "Executive", layout: "header", accent: "#4f46e5", font: "serif" },
   { id: "modern", name: "Modern Professional", category: "Professional", layout: "sidebar", accent: "#0891b2", font: "sans" },
-  { id: "ats", name: "ATS Pro", category: "ATS", layout: "single", accent: "#0f172a", font: "sans" },
+  { id: "ats", name: "ATS Pro", category: "ATS-Friendly", layout: "single", accent: "#0f172a", font: "sans" },
+  { id: "minimal", name: "Minimal Black", category: "Minimalist", layout: "single", accent: "#1f2937", font: "sans", minimal: true },
   { id: "creative", name: "Creative Portfolio", category: "Creative", layout: "creative", accent: "#db2777", font: "sans" },
-  { id: "tech", name: "Tech Innovator", category: "Tech", layout: "tech", accent: "#7c3aed", font: "mono" },
   { id: "corporate", name: "Corporate Premium", category: "Corporate", layout: "sidebar", accent: "#0e7490", font: "serif" },
-  { id: "minimal", name: "Minimal Black", category: "Minimal", layout: "single", accent: "#1f2937", font: "sans", minimal: true },
+  { id: "tech", name: "Tech Innovator", category: "Technology", layout: "tech", accent: "#7c3aed", font: "mono" },
+  { id: "startup", name: "Startup Expert", category: "Startup", layout: "compact", accent: "#ea580c", font: "sans" },
+  { id: "business", name: "Business Leader", category: "Business", layout: "sidebar", accent: "#1e293b", font: "serif" },
+  { id: "elegant", name: "Elegant Professional", category: "Professional", layout: "elegant", accent: "#9d7d3a", font: "serif" },
+  { id: "academic", name: "Academic Scholar", category: "Academic", layout: "elegant", accent: "#334155", font: "serif" },
+  { id: "marketing", name: "Marketing Specialist", category: "Marketing", layout: "creative", accent: "#e11d48", font: "sans" },
+  { id: "product", name: "Product Manager", category: "Product", layout: "timeline", accent: "#2563eb", font: "sans" },
+  { id: "engineer", name: "Software Engineer", category: "Technology", layout: "tech", accent: "#059669", font: "mono" },
+  { id: "data", name: "Data Analyst", category: "Data", layout: "sidebar", accent: "#0284c7", font: "sans" },
+  { id: "finance", name: "Financial Consultant", category: "Finance", layout: "compact", accent: "#1e40af", font: "serif" },
+  { id: "hr", name: "HR Professional", category: "Human Resources", layout: "sidebar", accent: "#be185d", font: "sans" },
+  { id: "sales", name: "Sales Executive", category: "Sales", layout: "timeline", accent: "#dc2626", font: "sans" },
+  { id: "healthcare", name: "Healthcare Professional", category: "Healthcare", layout: "sidebar", accent: "#0d9488", font: "sans" },
   { id: "premium", name: "Premium Gold", category: "Premium", layout: "header", accent: "#b8860b", font: "serif" },
 ];
 
@@ -160,8 +172,7 @@ export function resumeDataToContent(d: ResumeData): SampleResume {
 
 // Older saved resumes used template ids modern/professional/minimal/academic/creative.
 const TEMPLATE_ALIASES: Record<string, string> = {
-  professional: "corporate",
-  academic: "premium",
+  professional: "modern",
 };
 
 export function resolveTemplateId(id: string | undefined): string {
