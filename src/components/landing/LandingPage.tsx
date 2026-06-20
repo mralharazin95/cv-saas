@@ -16,161 +16,145 @@ import {
   ArrowRight,
   Check,
   Zap,
-  Shield,
   Layout,
+  LayoutTemplate,
   Star,
   ChevronRight,
   Menu,
   X,
+  Wand2,
+  Target,
+  Lightbulb,
+  PenLine,
+  Quote,
+  Crown,
+  TrendingUp,
+  CircleCheckBig,
 } from "lucide-react";
 import { useState } from "react";
 
 export function LandingPage() {
   const t = useTranslations("Landing");
   const nav = useTranslations("Nav");
+  const p = useTranslations("Pricing");
   const { data: session } = useSession();
   const params = useParams();
   const locale = (params?.locale as string) || "en";
   const [mobileMenu, setMobileMenu] = useState(false);
 
   const features = [
-    { icon: Layout, title: t("feature_templates"), desc: t("feature_templates_desc") },
-    { icon: Sparkles, title: t("feature_ai"), desc: t("feature_ai_desc") },
-    { icon: Download, title: t("feature_export"), desc: t("feature_export_desc") },
-    { icon: Globe, title: t("feature_multilang"), desc: t("feature_multilang_desc") },
-    { icon: Moon, title: t("feature_dark"), desc: t("feature_dark_desc") },
-    { icon: Palette, title: t("feature_customize"), desc: t("feature_customize_desc") },
+    { icon: LayoutTemplate, key: "templates" },
+    { icon: Sparkles, key: "ai" },
+    { icon: Download, key: "export" },
+    { icon: Globe, key: "multilang" },
+    { icon: Moon, key: "dark" },
+    { icon: Palette, key: "customize" },
+  ];
+
+  const aiTools = [
+    { icon: Wand2, key: "ai_1" },
+    { icon: PenLine, key: "ai_2" },
+    { icon: Target, key: "ai_3" },
+    { icon: Lightbulb, key: "ai_4" },
+  ];
+
+  const steps = [
+    { n: "1", key: "step_1" },
+    { n: "2", key: "step_2" },
+    { n: "3", key: "step_3" },
+  ];
+
+  const stats = [
+    { icon: TrendingUp, value: "50K+", key: "stat_users" },
+    { icon: FileText, value: "120K+", key: "stat_cvs" },
+    { icon: LayoutTemplate, value: "20+", key: "stat_templates" },
+    { icon: Star, value: "92", key: "stat_score" },
   ];
 
   const templates = [
-    { id: "modern", gradient: "from-indigo-500 to-purple-600" },
-    { id: "professional", gradient: "from-slate-600 to-slate-800" },
-    { id: "minimal", gradient: "from-gray-400 to-gray-600" },
-    { id: "academic", gradient: "from-emerald-500 to-teal-700" },
-    { id: "creative", gradient: "from-pink-500 to-orange-500" },
+    { name: "Executive Elite", accent: "#4f46e5", tag: "Executive" },
+    { name: "Modern Professional", accent: "#06b6d4", tag: "Professional" },
+    { name: "ATS Pro", accent: "#0f172a", tag: "ATS" },
+    { name: "Creative Portfolio", accent: "#ec4899", tag: "Creative" },
+    { name: "Tech Innovator", accent: "#7c3aed", tag: "Tech" },
+    { name: "Corporate Premium", accent: "#0e7490", tag: "Corporate" },
+    { name: "Minimal Black", accent: "#334155", tag: "Minimal" },
+    { name: "Premium Gold", accent: "#d4a028", tag: "Premium" },
   ];
+
+  const testimonials = ["t1", "t2", "t3"];
+
+  const companies = ["Google", "Microsoft", "Amazon", "Meta", "Apple", "Stripe", "Spotify", "Nvidia"];
+
+  const freeFeatures = ["free_1", "free_2", "free_3", "free_4"];
+  const proFeatures = ["pro_1", "pro_2", "pro_3", "pro_4", "pro_5"];
 
   return (
     <div style={{ background: "var(--bg-primary)", color: "var(--text-primary)" }}>
+      {/* ===== Announcement strip ===== */}
+      <div className="gradient-primary text-white text-center text-sm py-2 px-4">
+        <span className="inline-flex items-center gap-2 font-medium">
+          <Sparkles className="w-4 h-4" />
+          {t("announce")}
+        </span>
+      </div>
+
       {/* ===== Navbar ===== */}
-      <nav
-        className="fixed top-0 left-0 right-0 z-50 glass"
-        style={{ borderBottom: "1px solid var(--border-primary)" }}
-      >
+      <nav className="sticky top-0 z-50 glass" style={{ borderBottom: "1px solid var(--border-primary)" }}>
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <Link href={`/${locale}`} className="flex items-center gap-2">
+          <Link href={`/${locale}`} className="flex items-center gap-2.5">
             <div
               className="w-9 h-9 rounded-xl flex items-center justify-center gradient-primary"
-              style={{ boxShadow: "0 0 20px rgba(99, 102, 241, 0.3)" }}
+              style={{ boxShadow: "var(--shadow-glow)" }}
             >
               <FileText className="w-5 h-5 text-white" />
             </div>
-            <span className="font-bold text-xl" style={{ color: "var(--text-primary)" }}>
-              ResumeX
-            </span>
+            <span className="font-display font-bold text-xl tracking-tight">ResumeX</span>
           </Link>
 
-          {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-6">
-            <a
-              href="#features"
-              className="text-sm font-medium transition-colors hover:opacity-80"
-              style={{ color: "var(--text-secondary)" }}
-            >
-              {nav("features")}
-            </a>
-            <a
-              href="#templates"
-              className="text-sm font-medium transition-colors hover:opacity-80"
-              style={{ color: "var(--text-secondary)" }}
-            >
-              {nav("templates")}
-            </a>
+          <div className="hidden md:flex items-center gap-7">
+            <a href="#features" className="text-sm font-medium transition-colors hover:opacity-70" style={{ color: "var(--text-secondary)" }}>{nav("features")}</a>
+            <a href="#ai" className="text-sm font-medium transition-colors hover:opacity-70" style={{ color: "var(--text-secondary)" }}>AI</a>
+            <a href="#templates" className="text-sm font-medium transition-colors hover:opacity-70" style={{ color: "var(--text-secondary)" }}>{nav("templates")}</a>
+            <a href="#pricing" className="text-sm font-medium transition-colors hover:opacity-70" style={{ color: "var(--text-secondary)" }}>{nav("pricing")}</a>
           </div>
 
           <div className="hidden md:flex items-center gap-3">
             <LanguageSwitcher />
             <ThemeToggle />
             {session ? (
-              <Link
-                href={`/${locale}/dashboard`}
-                className="px-5 py-2 rounded-xl text-sm font-semibold text-white gradient-primary transition-all hover:shadow-lg hover:scale-105"
-              >
-                {nav("dashboard")}
-              </Link>
+              <Link href={`/${locale}/dashboard`} className="px-5 py-2 rounded-xl text-sm font-semibold text-white btn-primary">{nav("dashboard")}</Link>
             ) : (
               <>
-                <Link
-                  href={`/${locale}/login`}
-                  className="px-4 py-2 rounded-xl text-sm font-medium transition-colors"
-                  style={{ color: "var(--text-secondary)" }}
-                >
-                  {nav("login")}
-                </Link>
-                <Link
-                  href={`/${locale}/register`}
-                  className="px-5 py-2 rounded-xl text-sm font-semibold text-white gradient-primary transition-all hover:shadow-lg hover:scale-105"
-                >
-                  {nav("signup")}
-                </Link>
+                <Link href={`/${locale}/login`} className="px-4 py-2 rounded-xl text-sm font-medium transition-colors hover:opacity-70" style={{ color: "var(--text-secondary)" }}>{nav("login")}</Link>
+                <Link href={`/${locale}/register`} className="px-5 py-2 rounded-xl text-sm font-semibold text-white btn-primary">{nav("signup")}</Link>
               </>
             )}
           </div>
 
-          {/* Mobile menu button */}
-          <button
-            className="md:hidden p-2"
-            onClick={() => setMobileMenu(!mobileMenu)}
-            style={{ color: "var(--text-primary)" }}
-          >
+          <button className="md:hidden p-2" onClick={() => setMobileMenu(!mobileMenu)} style={{ color: "var(--text-primary)" }} aria-label="Menu">
             {mobileMenu ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
 
-        {/* Mobile Menu */}
         {mobileMenu && (
-          <div
-            className="md:hidden animate-fadeInDown"
-            style={{
-              background: "var(--bg-elevated)",
-              borderTop: "1px solid var(--border-primary)",
-              padding: "16px 24px",
-            }}
-          >
+          <div className="md:hidden animate-fadeInDown" style={{ background: "var(--bg-elevated)", borderTop: "1px solid var(--border-primary)", padding: "16px 24px" }}>
             <div className="flex flex-col gap-4">
-              <a href="#features" className="text-sm font-medium" style={{ color: "var(--text-secondary)" }}>
-                {nav("features")}
-              </a>
-              <a href="#templates" className="text-sm font-medium" style={{ color: "var(--text-secondary)" }}>
-                {nav("templates")}
-              </a>
+              <a href="#features" onClick={() => setMobileMenu(false)} className="text-sm font-medium" style={{ color: "var(--text-secondary)" }}>{nav("features")}</a>
+              <a href="#ai" onClick={() => setMobileMenu(false)} className="text-sm font-medium" style={{ color: "var(--text-secondary)" }}>AI</a>
+              <a href="#templates" onClick={() => setMobileMenu(false)} className="text-sm font-medium" style={{ color: "var(--text-secondary)" }}>{nav("templates")}</a>
+              <a href="#pricing" onClick={() => setMobileMenu(false)} className="text-sm font-medium" style={{ color: "var(--text-secondary)" }}>{nav("pricing")}</a>
               <div className="flex items-center gap-3 pt-2">
                 <LanguageSwitcher />
                 <ThemeToggle />
               </div>
               <div className="flex flex-col gap-2 pt-2">
                 {session ? (
-                  <Link
-                    href={`/${locale}/dashboard`}
-                    className="px-5 py-2 rounded-xl text-sm font-semibold text-white text-center gradient-primary"
-                  >
-                    {nav("dashboard")}
-                  </Link>
+                  <Link href={`/${locale}/dashboard`} className="px-5 py-2.5 rounded-xl text-sm font-semibold text-white text-center btn-primary">{nav("dashboard")}</Link>
                 ) : (
                   <>
-                    <Link
-                      href={`/${locale}/login`}
-                      className="px-4 py-2 rounded-xl text-sm font-medium text-center"
-                      style={{ color: "var(--text-secondary)", border: "1px solid var(--border-primary)" }}
-                    >
-                      {nav("login")}
-                    </Link>
-                    <Link
-                      href={`/${locale}/register`}
-                      className="px-5 py-2 rounded-xl text-sm font-semibold text-white text-center gradient-primary"
-                    >
-                      {nav("signup")}
-                    </Link>
+                    <Link href={`/${locale}/login`} className="px-4 py-2.5 rounded-xl text-sm font-medium text-center" style={{ color: "var(--text-secondary)", border: "1px solid var(--border-primary)" }}>{nav("login")}</Link>
+                    <Link href={`/${locale}/register`} className="px-5 py-2.5 rounded-xl text-sm font-semibold text-white text-center btn-primary">{nav("signup")}</Link>
                   </>
                 )}
               </div>
@@ -179,131 +163,141 @@ export function LandingPage() {
         )}
       </nav>
 
-      {/* ===== Hero Section ===== */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
-        {/* Background Effects */}
+      {/* ===== Hero ===== */}
+      <section className="relative overflow-hidden">
         <div className="absolute inset-0 gradient-mesh" />
-        <div
-          className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full blur-3xl opacity-20 animate-float"
-          style={{ background: "var(--primary-400)" }}
-        />
-        <div
-          className="absolute bottom-1/4 right-1/4 w-72 h-72 rounded-full blur-3xl opacity-15"
-          style={{ background: "#a855f7", animationDelay: "1s", animation: "float 4s ease-in-out infinite" }}
-        />
+        <div className="absolute inset-x-0 top-0 h-full grid-pattern opacity-60" />
+        <div className="absolute top-24 -left-20 w-96 h-96 rounded-full blur-3xl opacity-20 animate-float" style={{ background: "var(--primary-400)" }} />
+        <div className="absolute bottom-0 -right-20 w-80 h-80 rounded-full blur-3xl opacity-15 animate-float-slow" style={{ background: "var(--accent-400)" }} />
 
-        <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
-          {/* Badge */}
-          <div
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium mb-8 animate-fadeInDown"
-            style={{
-              background: "var(--primary-50)",
-              color: "var(--primary-600)",
-              border: "1px solid var(--primary-200)",
-            }}
-          >
-            <Zap className="w-4 h-4" />
-            AI-Powered CV Builder
+        <div className="relative z-10 max-w-7xl mx-auto px-6 pt-20 pb-24 grid lg:grid-cols-2 gap-16 items-center">
+          {/* Left: copy */}
+          <div className="text-center lg:text-start">
+            <div className="badge badge-ai mb-6 animate-fadeInDown">
+              <Zap className="w-4 h-4" />
+              {t("hero_badge")}
+            </div>
+            <h1 className="font-display text-5xl md:text-6xl xl:text-7xl font-extrabold leading-[1.05] mb-6 animate-fadeInUp">
+              <span style={{ color: "var(--text-primary)" }}>{t("hero_title").split(" ").slice(0, -1).join(" ")} </span>
+              <span className="gradient-text">{t("hero_title").split(" ").slice(-1)[0]}</span>
+            </h1>
+            <p className="text-lg md:text-xl max-w-xl mx-auto lg:mx-0 mb-9 animate-fadeInUp stagger-1" style={{ color: "var(--text-secondary)", lineHeight: 1.7 }}>
+              {t("hero_subtitle")}
+            </p>
+            <div className="flex flex-col sm:flex-row items-center lg:items-start justify-center lg:justify-start gap-4 animate-fadeInUp stagger-2">
+              <Link href={`/${locale}/register`} className="group flex items-center gap-2 px-8 py-4 rounded-2xl text-white font-semibold text-lg btn-primary animate-pulse-glow">
+                {t("hero_cta")}
+                <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+              </Link>
+              <a href="#templates" className="flex items-center gap-2 px-8 py-4 rounded-2xl font-semibold text-lg transition-all hover:scale-105" style={{ background: "var(--bg-elevated)", color: "var(--text-primary)", border: "1px solid var(--border-primary)" }}>
+                {t("hero_cta_secondary")}
+              </a>
+            </div>
+            <div className="flex items-center justify-center lg:justify-start gap-3 mt-8 animate-fadeInUp stagger-3">
+              <div className="flex">
+                {[0, 1, 2, 3, 4].map((i) => (
+                  <Star key={i} className="w-4 h-4" style={{ color: "var(--gold-400)", fill: "var(--gold-400)" }} />
+                ))}
+              </div>
+              <span className="text-sm" style={{ color: "var(--text-tertiary)" }}>{t("hero_trust")}</span>
+            </div>
           </div>
 
-          {/* Main Title */}
-          <h1
-            className="text-5xl md:text-7xl font-extrabold leading-tight mb-6 animate-fadeInUp"
-            style={{ letterSpacing: "-0.03em" }}
-          >
-            <span style={{ color: "var(--text-primary)" }}>{t("hero_title").split(" ").slice(0, -1).join(" ")} </span>
-            <span className="gradient-text">{t("hero_title").split(" ").slice(-1)[0]}</span>
-          </h1>
-
-          {/* Subtitle */}
-          <p
-            className="text-lg md:text-xl max-w-2xl mx-auto mb-10 animate-fadeInUp stagger-1"
-            style={{ color: "var(--text-secondary)", lineHeight: "1.7" }}
-          >
-            {t("hero_subtitle")}
-          </p>
-
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fadeInUp stagger-2">
-            <Link
-              href={`/${locale}/register`}
-              className="group flex items-center gap-2 px-8 py-4 rounded-2xl text-white font-semibold text-lg gradient-primary transition-all hover:shadow-xl hover:scale-105 animate-pulse-glow"
-            >
-              {t("hero_cta")}
-              <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-            </Link>
-            <a
-              href="#templates"
-              className="flex items-center gap-2 px-8 py-4 rounded-2xl font-semibold text-lg transition-all hover:scale-105"
-              style={{
-                background: "var(--bg-tertiary)",
-                color: "var(--text-primary)",
-                border: "1px solid var(--border-primary)",
-              }}
-            >
-              {t("hero_cta_secondary")}
-            </a>
-          </div>
-
-          {/* Stats */}
-          <div className="flex items-center justify-center gap-8 mt-16 animate-fadeInUp stagger-3">
-            {[
-              { value: "10K+", label: "Users" },
-              { value: "50K+", label: "CVs Created" },
-              { value: "5", label: "Templates" },
-            ].map((stat) => (
-              <div key={stat.label} className="text-center">
-                <div className="text-2xl md:text-3xl font-bold gradient-text">{stat.value}</div>
-                <div className="text-sm mt-1" style={{ color: "var(--text-tertiary)" }}>
-                  {stat.label}
+          {/* Right: resume mockup */}
+          <div className="relative animate-fadeInUp stagger-2 hidden lg:block">
+            <div className="relative mx-auto max-w-sm">
+              <div className="card p-6" style={{ boxShadow: "var(--shadow-xl)" }}>
+                <div className="flex items-center gap-4 mb-5">
+                  <div className="w-16 h-16 rounded-2xl gradient-primary flex items-center justify-center text-white font-display font-bold text-2xl">A</div>
+                  <div className="flex-1">
+                    <div className="h-3.5 w-32 rounded-full mb-2" style={{ background: "var(--text-primary)", opacity: 0.85 }} />
+                    <div className="h-2.5 w-24 rounded-full" style={{ background: "var(--primary-400)" }} />
+                  </div>
+                </div>
+                <div className="space-y-2 mb-5">
+                  <div className="h-2 w-full rounded-full" style={{ background: "var(--border-primary)" }} />
+                  <div className="h-2 w-5/6 rounded-full" style={{ background: "var(--border-primary)" }} />
+                  <div className="h-2 w-4/6 rounded-full" style={{ background: "var(--border-primary)" }} />
+                </div>
+                <div className="h-2.5 w-20 rounded-full mb-3" style={{ background: "var(--primary-500)" }} />
+                <div className="space-y-2 mb-5">
+                  <div className="h-2 w-full rounded-full" style={{ background: "var(--border-primary)" }} />
+                  <div className="h-2 w-3/4 rounded-full" style={{ background: "var(--border-primary)" }} />
+                </div>
+                <div className="flex gap-2">
+                  {["#4f46e5", "#06b6d4", "#d4a028"].map((c) => (
+                    <div key={c} className="h-6 px-3 rounded-full" style={{ background: c, opacity: 0.18 }} />
+                  ))}
                 </div>
               </div>
+
+              {/* Floating ATS score */}
+              <div className="absolute -top-5 -right-5 card p-3 flex items-center gap-3 animate-float" style={{ boxShadow: "var(--shadow-lg)" }}>
+                <svg width="44" height="44" viewBox="0 0 44 44">
+                  <circle cx="22" cy="22" r="18" fill="none" stroke="var(--border-primary)" strokeWidth="5" />
+                  <circle cx="22" cy="22" r="18" fill="none" stroke="var(--success)" strokeWidth="5" strokeLinecap="round" strokeDasharray="113" strokeDashoffset="9" transform="rotate(-90 22 22)" />
+                </svg>
+                <div>
+                  <div className="font-mono font-bold text-lg leading-none" style={{ color: "var(--text-primary)" }}>92</div>
+                  <div className="text-xs" style={{ color: "var(--text-tertiary)" }}>ATS</div>
+                </div>
+              </div>
+
+              {/* Floating AI pill */}
+              <div className="absolute -bottom-4 -left-6 badge badge-ai animate-float-slow" style={{ boxShadow: "var(--shadow-md)", background: "var(--bg-elevated)" }}>
+                <Wand2 className="w-4 h-4" />
+                AI rewrite
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Logo cloud */}
+        <div className="relative z-10 max-w-7xl mx-auto px-6 pb-16">
+          <p className="text-center text-sm font-medium mb-6" style={{ color: "var(--text-tertiary)" }}>{t("social_title")}</p>
+          <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-4 opacity-60">
+            {companies.map((c) => (
+              <span key={c} className="font-display font-bold text-lg md:text-xl" style={{ color: "var(--text-secondary)" }}>{c}</span>
             ))}
           </div>
         </div>
+      </section>
 
-        {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-          <ChevronRight className="w-6 h-6 rotate-90" style={{ color: "var(--text-tertiary)" }} />
+      {/* ===== Stats band ===== */}
+      <section className="py-12" style={{ background: "var(--bg-secondary)", borderBlock: "1px solid var(--border-primary)" }}>
+        <div className="max-w-6xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8">
+          {stats.map((s) => {
+            const Icon = s.icon;
+            return (
+              <div key={s.key} className="text-center">
+                <div className="inline-flex items-center justify-center w-11 h-11 rounded-xl mb-3" style={{ background: "var(--primary-50)" }}>
+                  <Icon className="w-5 h-5" style={{ color: "var(--primary-500)" }} />
+                </div>
+                <div className="font-display text-3xl font-extrabold gradient-text">{s.value}</div>
+                <div className="text-sm mt-1" style={{ color: "var(--text-tertiary)" }}>{t(s.key)}</div>
+              </div>
+            );
+          })}
         </div>
       </section>
 
-      {/* ===== Features Section ===== */}
-      <section id="features" className="py-24 relative">
+      {/* ===== Features ===== */}
+      <section id="features" className="py-24 scroll-mt-24">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-bold mb-4" style={{ color: "var(--text-primary)" }}>
-              {t("features_title")}
-            </h2>
-            <p className="text-lg max-w-xl mx-auto" style={{ color: "var(--text-secondary)" }}>
-              {t("features_subtitle")}
-            </p>
+          <div className="text-center max-w-2xl mx-auto mb-16">
+            <h2 className="font-display text-3xl md:text-5xl font-bold mb-4">{t("features_title")}</h2>
+            <p className="text-lg" style={{ color: "var(--text-secondary)" }}>{t("features_subtitle")}</p>
           </div>
-
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((feature, i) => {
               const Icon = feature.icon;
               return (
-                <div
-                  key={i}
-                  className="group p-6 rounded-2xl transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
-                  style={{
-                    background: "var(--bg-elevated)",
-                    border: "1px solid var(--border-primary)",
-                  }}
-                >
-                  <div
-                    className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 transition-all group-hover:scale-110"
-                    style={{ background: "var(--primary-50)" }}
-                  >
-                    <Icon className="w-6 h-6" style={{ color: "var(--primary-500)" }} />
+                <div key={i} className="group card card-hover p-7">
+                  <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-5 transition-transform group-hover:scale-110" style={{ background: "var(--primary-50)" }}>
+                    <Icon className="w-6 h-6" style={{ color: "var(--primary-600)" }} />
                   </div>
-                  <h3 className="text-lg font-semibold mb-2" style={{ color: "var(--text-primary)" }}>
-                    {feature.title}
-                  </h3>
-                  <p className="text-sm leading-relaxed" style={{ color: "var(--text-secondary)" }}>
-                    {feature.desc}
-                  </p>
+                  <h3 className="text-lg font-semibold mb-2">{t(`feature_${feature.key}`)}</h3>
+                  <p className="text-sm leading-relaxed" style={{ color: "var(--text-secondary)" }}>{t(`feature_${feature.key}_desc`)}</p>
                 </div>
               );
             })}
@@ -311,44 +305,158 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* ===== Templates Section ===== */}
-      <section id="templates" className="py-24" style={{ background: "var(--bg-secondary)" }}>
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-bold mb-4" style={{ color: "var(--text-primary)" }}>
-              {t("templates_title")}
-            </h2>
-            <p className="text-lg max-w-xl mx-auto" style={{ color: "var(--text-secondary)" }}>
-              {t("templates_subtitle")}
-            </p>
+      {/* ===== AI section ===== */}
+      <section id="ai" className="py-24 scroll-mt-24 relative overflow-hidden" style={{ background: "var(--bg-secondary)" }}>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40rem] h-[40rem] rounded-full blur-3xl opacity-10" style={{ background: "var(--accent-400)" }} />
+        <div className="relative z-10 max-w-7xl mx-auto px-6">
+          <div className="text-center max-w-2xl mx-auto mb-16">
+            <div className="badge badge-ai mb-5"><Sparkles className="w-4 h-4" />{t("ai_eyebrow")}</div>
+            <h2 className="font-display text-3xl md:text-5xl font-bold mb-4">{t("ai_title")}</h2>
+            <p className="text-lg" style={{ color: "var(--text-secondary)" }}>{t("ai_subtitle")}</p>
           </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {aiTools.map((tool, i) => {
+              const Icon = tool.icon;
+              return (
+                <div key={i} className="card card-hover p-7" style={{ borderColor: "var(--accent-200)" }}>
+                  <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-5 gradient-aqua">
+                    <Icon className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="text-base font-semibold mb-2">{t(`${tool.key}_title`)}</h3>
+                  <p className="text-sm leading-relaxed" style={{ color: "var(--text-secondary)" }}>{t(`${tool.key}_desc`)}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+      {/* ===== Steps ===== */}
+      <section className="py-24">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center max-w-2xl mx-auto mb-16">
+            <p className="text-sm font-semibold uppercase tracking-wider mb-3" style={{ color: "var(--accent-600)" }}>{t("steps_subtitle")}</p>
+            <h2 className="font-display text-3xl md:text-5xl font-bold">{t("steps_title")}</h2>
+          </div>
+          <div className="grid md:grid-cols-3 gap-8">
+            {steps.map((step) => (
+              <div key={step.n} className="relative text-center px-4">
+                <div className="mx-auto w-16 h-16 rounded-2xl gradient-primary flex items-center justify-center mb-6 font-display font-bold text-2xl text-white" style={{ boxShadow: "var(--shadow-glow)" }}>{step.n}</div>
+                <h3 className="text-xl font-semibold mb-2">{t(`${step.key}_title`)}</h3>
+                <p className="text-sm leading-relaxed max-w-xs mx-auto" style={{ color: "var(--text-secondary)" }}>{t(`${step.key}_desc`)}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ===== ATS scoring ===== */}
+      <section className="py-24" style={{ background: "var(--bg-secondary)", borderBlock: "1px solid var(--border-primary)" }}>
+        <div className="max-w-6xl mx-auto px-6 grid lg:grid-cols-2 gap-14 items-center">
+          <div>
+            <div className="badge badge-brand mb-5"><BarChartMini />{t("ats_eyebrow")}</div>
+            <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">{t("ats_title")}</h2>
+            <p className="text-lg mb-8" style={{ color: "var(--text-secondary)" }}>{t("ats_subtitle")}</p>
+            <ul className="space-y-3">
+              {["ats_check_1", "ats_check_2", "ats_check_3"].map((c) => (
+                <li key={c} className="flex items-center gap-3">
+                  <span className="w-6 h-6 rounded-full flex items-center justify-center" style={{ background: "var(--success-bg)" }}>
+                    <Check className="w-4 h-4" style={{ color: "var(--success)" }} />
+                  </span>
+                  <span className="text-sm font-medium">{t(c)}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="card p-8" style={{ boxShadow: "var(--shadow-lg)" }}>
+            <div className="grid grid-cols-3 gap-4">
+              {[
+                { label: t("ats_metric_ats"), value: 92, color: "var(--success)" },
+                { label: t("ats_metric_read"), value: 88, color: "var(--primary-500)" },
+                { label: t("ats_metric_key"), value: 85, color: "var(--accent-500)" },
+              ].map((m) => {
+                const circ = 2 * Math.PI * 30;
+                const offset = circ * (1 - m.value / 100);
+                return (
+                  <div key={m.label} className="text-center">
+                    <svg width="80" height="80" viewBox="0 0 80 80" className="mx-auto">
+                      <circle cx="40" cy="40" r="30" fill="none" stroke="var(--border-primary)" strokeWidth="7" />
+                      <circle cx="40" cy="40" r="30" fill="none" stroke={m.color} strokeWidth="7" strokeLinecap="round" strokeDasharray={circ} strokeDashoffset={offset} transform="rotate(-90 40 40)" />
+                      <text x="40" y="46" textAnchor="middle" className="font-mono" fontSize="20" fontWeight="700" fill="var(--text-primary)">{m.value}</text>
+                    </svg>
+                    <div className="text-xs mt-2" style={{ color: "var(--text-tertiary)" }}>{m.label}</div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== Templates ===== */}
+      <section id="templates" className="py-24 scroll-mt-24">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center max-w-2xl mx-auto mb-16">
+            <h2 className="font-display text-3xl md:text-5xl font-bold mb-4">{t("templates_title")}</h2>
+            <p className="text-lg" style={{ color: "var(--text-secondary)" }}>{t("templates_subtitle")}</p>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {templates.map((tpl) => (
-              <div
-                key={tpl.id}
-                className="group rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-xl cursor-pointer"
-                style={{ border: "1px solid var(--border-primary)" }}
-              >
-                <div className={`h-48 bg-gradient-to-br ${tpl.gradient} relative`}>
-                  <div className="absolute inset-4 bg-white/90 rounded-lg p-3">
-                    <div className="w-12 h-1.5 bg-gray-300 rounded mb-2" />
-                    <div className="w-20 h-1 bg-gray-200 rounded mb-3" />
-                    <div className="space-y-1.5">
-                      <div className="w-full h-1 bg-gray-200 rounded" />
-                      <div className="w-4/5 h-1 bg-gray-200 rounded" />
-                      <div className="w-3/5 h-1 bg-gray-200 rounded" />
-                    </div>
-                    <div className="mt-3 space-y-1">
-                      <div className="w-full h-1 bg-gray-100 rounded" />
-                      <div className="w-full h-1 bg-gray-100 rounded" />
+              <div key={tpl.name} className="group card card-hover overflow-hidden cursor-pointer">
+                <div className="aspect-[3/4] p-4" style={{ background: "var(--bg-tertiary)" }}>
+                  <div className="w-full h-full rounded-lg bg-white p-3 shadow-sm flex flex-col gap-2" style={{ boxShadow: "var(--shadow-sm)" }}>
+                    <div className="h-6 rounded" style={{ background: tpl.accent }} />
+                    <div className="flex gap-2 mt-1">
+                      <div className="w-1/3 space-y-1.5">
+                        <div className="h-1.5 rounded" style={{ background: tpl.accent, opacity: 0.5 }} />
+                        <div className="h-1.5 w-2/3 rounded bg-gray-200" />
+                        <div className="h-1.5 rounded bg-gray-200" />
+                        <div className="h-1.5 w-3/4 rounded bg-gray-200" />
+                      </div>
+                      <div className="flex-1 space-y-1.5">
+                        <div className="h-1.5 w-1/2 rounded" style={{ background: tpl.accent, opacity: 0.7 }} />
+                        <div className="h-1.5 rounded bg-gray-200" />
+                        <div className="h-1.5 rounded bg-gray-200" />
+                        <div className="h-1.5 w-5/6 rounded bg-gray-200" />
+                        <div className="h-1.5 w-2/3 rounded bg-gray-200" />
+                      </div>
                     </div>
                   </div>
                 </div>
-                <div className="p-4" style={{ background: "var(--bg-elevated)" }}>
-                  <h3 className="font-semibold text-sm" style={{ color: "var(--text-primary)" }}>
-                    {tpl.id.charAt(0).toUpperCase() + tpl.id.slice(1)}
-                  </h3>
+                <div className="p-4 flex items-center justify-between">
+                  <h3 className="font-semibold text-sm">{tpl.name}</h3>
+                  <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: "var(--primary-50)", color: "var(--primary-600)" }}>{tpl.tag}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="text-center mt-12">
+            <Link href={`/${locale}/register`} className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl font-semibold transition-all hover:scale-105" style={{ background: "var(--bg-elevated)", color: "var(--text-primary)", border: "1px solid var(--border-primary)" }}>
+              {t("templates_cta")}
+              <ChevronRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== Testimonials ===== */}
+      <section className="py-24" style={{ background: "var(--bg-secondary)", borderBlock: "1px solid var(--border-primary)" }}>
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center max-w-2xl mx-auto mb-16">
+            <h2 className="font-display text-3xl md:text-5xl font-bold mb-4">{t("testimonials_title")}</h2>
+            <p className="text-lg" style={{ color: "var(--text-secondary)" }}>{t("testimonials_subtitle")}</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6">
+            {testimonials.map((tk) => (
+              <div key={tk} className="card p-7">
+                <Quote className="w-8 h-8 mb-4" style={{ color: "var(--primary-300)" }} />
+                <p className="text-base leading-relaxed mb-6" style={{ color: "var(--text-primary)" }}>{t(`${tk}_quote`)}</p>
+                <div className="flex items-center gap-3">
+                  <div className="w-11 h-11 rounded-full gradient-primary flex items-center justify-center text-white font-semibold">{t(`${tk}_name`).charAt(0)}</div>
+                  <div>
+                    <div className="font-semibold text-sm">{t(`${tk}_name`)}</div>
+                    <div className="text-xs" style={{ color: "var(--text-tertiary)" }}>{t(`${tk}_role`)}</div>
+                  </div>
                 </div>
               </div>
             ))}
@@ -356,55 +464,122 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* ===== CTA Section ===== */}
+      {/* ===== Pricing ===== */}
+      <section id="pricing" className="py-24 scroll-mt-24">
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="text-center max-w-2xl mx-auto mb-16">
+            <h2 className="font-display text-3xl md:text-5xl font-bold mb-4">{p("title")}</h2>
+            <p className="text-lg" style={{ color: "var(--text-secondary)" }}>{p("subtitle")}</p>
+          </div>
+          <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+            {/* Free */}
+            <div className="card p-8">
+              <h3 className="font-display text-xl font-bold mb-1">{p("free_name")}</h3>
+              <p className="text-sm mb-5" style={{ color: "var(--text-tertiary)" }}>{p("free_tagline")}</p>
+              <div className="flex items-baseline gap-1 mb-6">
+                <span className="font-display text-4xl font-extrabold">{p("free_price")}</span>
+                <span className="text-sm" style={{ color: "var(--text-tertiary)" }}>{p("free_period")}</span>
+              </div>
+              <ul className="space-y-3 mb-8">
+                {freeFeatures.map((f) => (
+                  <li key={f} className="flex items-center gap-3 text-sm">
+                    <Check className="w-5 h-5 flex-shrink-0" style={{ color: "var(--success)" }} />
+                    {p(f)}
+                  </li>
+                ))}
+              </ul>
+              <Link href={`/${locale}/register`} className="block text-center px-6 py-3 rounded-xl font-semibold transition-all hover:scale-[1.02]" style={{ background: "var(--bg-tertiary)", color: "var(--text-primary)", border: "1px solid var(--border-primary)" }}>{p("free_cta")}</Link>
+            </div>
+
+            {/* Pro */}
+            <div className="card p-8 relative" style={{ borderColor: "var(--primary-400)", borderWidth: 2, boxShadow: "var(--shadow-glow)" }}>
+              <span className="absolute -top-3 left-1/2 -translate-x-1/2 badge badge-premium"><Crown className="w-3.5 h-3.5" />{p("pro_badge")}</span>
+              <h3 className="font-display text-xl font-bold mb-1">{p("pro_name")}</h3>
+              <p className="text-sm mb-5" style={{ color: "var(--text-tertiary)" }}>{p("pro_tagline")}</p>
+              <div className="flex items-baseline gap-1 mb-6">
+                <span className="font-display text-4xl font-extrabold gradient-text">{p("pro_price")}</span>
+                <span className="text-sm" style={{ color: "var(--text-tertiary)" }}>{p("pro_period")}</span>
+              </div>
+              <ul className="space-y-3 mb-8">
+                {proFeatures.map((f) => (
+                  <li key={f} className="flex items-center gap-3 text-sm">
+                    <Check className="w-5 h-5 flex-shrink-0" style={{ color: "var(--primary-500)" }} />
+                    {p(f)}
+                  </li>
+                ))}
+              </ul>
+              <Link href={`/${locale}/register`} className="flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-white btn-primary">{p("pro_cta")}<ArrowRight className="w-4 h-4" /></Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== Final CTA ===== */}
       <section className="py-24 relative overflow-hidden">
         <div className="absolute inset-0 gradient-mesh" />
         <div className="relative z-10 max-w-3xl mx-auto px-6 text-center">
-          <div
-            className="p-12 rounded-3xl"
-            style={{
-              background: "linear-gradient(135deg, var(--primary-600), var(--primary-800))",
-              boxShadow: "0 25px 50px rgba(99, 102, 241, 0.25)",
-            }}
-          >
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">{t("cta_title")}</h2>
-            <p className="text-lg text-white/80 mb-8">{t("cta_subtitle")}</p>
-            <Link
-              href={`/${locale}/register`}
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl bg-white font-semibold text-lg transition-all hover:scale-105 hover:shadow-lg"
-              style={{ color: "var(--primary-700)" }}
-            >
-              {t("hero_cta")}
-              <ArrowRight className="w-5 h-5" />
-            </Link>
+          <div className="p-12 rounded-3xl relative overflow-hidden" style={{ background: "linear-gradient(135deg, var(--primary-600), var(--violet-600))", boxShadow: "0 25px 60px rgba(99, 102, 241, 0.3)" }}>
+            <div className="absolute inset-0 grid-pattern opacity-20" />
+            <div className="relative z-10">
+              <h2 className="font-display text-3xl md:text-4xl font-bold text-white mb-4">{t("cta_title")}</h2>
+              <p className="text-lg text-white/85 mb-8 max-w-xl mx-auto">{t("cta_subtitle")}</p>
+              <Link href={`/${locale}/register`} className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl bg-white font-semibold text-lg transition-all hover:scale-105" style={{ color: "var(--primary-700)" }}>
+                {t("hero_cta")}
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+            </div>
           </div>
         </div>
       </section>
 
       {/* ===== Footer ===== */}
-      <footer
-        className="py-12"
-        style={{
-          background: "var(--bg-secondary)",
-          borderTop: "1px solid var(--border-primary)",
-        }}
-      >
+      <footer className="py-14" style={{ background: "var(--bg-secondary)", borderTop: "1px solid var(--border-primary)" }}>
         <div className="max-w-7xl mx-auto px-6">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg flex items-center justify-center gradient-primary">
-                <FileText className="w-4 h-4 text-white" />
+          <div className="grid md:grid-cols-4 gap-10 mb-12">
+            <div>
+              <div className="flex items-center gap-2.5 mb-4">
+                <div className="w-9 h-9 rounded-xl flex items-center justify-center gradient-primary">
+                  <FileText className="w-5 h-5 text-white" />
+                </div>
+                <span className="font-display font-bold text-xl">ResumeX</span>
               </div>
-              <span className="font-bold text-lg" style={{ color: "var(--text-primary)" }}>
-                ResumeX
-              </span>
+              <p className="text-sm max-w-xs" style={{ color: "var(--text-tertiary)" }}>{t("footer_tagline")}</p>
             </div>
-            <p className="text-sm" style={{ color: "var(--text-tertiary)" }}>
-              {t("footer_tagline")} © {new Date().getFullYear()}
-            </p>
+            <FooterCol title={t("footer_product")} items={[nav("features"), nav("templates"), nav("pricing"), "AI"]} />
+            <FooterCol title={t("footer_company")} items={["About", "Blog", "Careers", "Contact"]} />
+            <FooterCol title={t("footer_resources")} items={["Help", "Examples", "Privacy", "Terms"]} />
+          </div>
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-8" style={{ borderTop: "1px solid var(--border-primary)" }}>
+            <p className="text-sm" style={{ color: "var(--text-tertiary)" }}>© {new Date().getFullYear()} ResumeX. {t("footer_rights")}</p>
+            <div className="flex items-center gap-2">
+              {[Globe, Star, Crown].map((Icon, i) => (
+                <span key={i} className="w-9 h-9 rounded-full flex items-center justify-center transition-colors" style={{ background: "var(--bg-tertiary)", color: "var(--text-secondary)" }}>
+                  <Icon className="w-4 h-4" />
+                </span>
+              ))}
+            </div>
           </div>
         </div>
       </footer>
     </div>
   );
+}
+
+function FooterCol({ title, items }: { title: string; items: string[] }) {
+  return (
+    <div>
+      <h4 className="font-semibold text-sm mb-4" style={{ color: "var(--text-primary)" }}>{title}</h4>
+      <ul className="space-y-2.5">
+        {items.map((it) => (
+          <li key={it}>
+            <a href="#" className="text-sm transition-colors hover:opacity-70" style={{ color: "var(--text-tertiary)" }}>{it}</a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function BarChartMini() {
+  return <TrendingUp className="w-4 h-4" />;
 }

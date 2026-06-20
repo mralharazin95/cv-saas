@@ -18,8 +18,6 @@ export default async function LocaleLayout({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  console.log("LocaleLayout resolved locale:", locale);
-  console.log("Routing locales:", routing.locales);
 
   if (!routing.locales.includes(locale as any)) {
     notFound();
@@ -29,7 +27,7 @@ export default async function LocaleLayout({
   const dir = locale === 'ar' ? 'rtl' : 'ltr';
 
   return (
-    <div dir={dir}>
+    <div lang={locale} dir={dir}>
       <Providers>
         <NextIntlClientProvider messages={messages}>
           {children}
